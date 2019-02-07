@@ -60,7 +60,7 @@ namespace ExampleObjectDetection
 			}
 
 			_catalog = CatalogUtil.ReadCatalogItems (_catalogPath);
-			var fileTuples = new List<(string input, string output)> () { (_input, _output) };
+			var fileTuples = new List<Tuple<string, string>> () { new Tuple<string, string>(_input, _output) };
 			string modelFile = _modelPath;
 
 			using (var graph = new TFGraph ()) {
@@ -71,7 +71,7 @@ namespace ExampleObjectDetection
 					Console.WriteLine("Detecting objects");
 
 					foreach (var tuple in fileTuples) {
-						var tensor = ImageUtil.CreateTensorFromImageFile (tuple.input, TFDataType.UInt8);
+						var tensor = ImageUtil.CreateTensorFromImageFile (tuple.Item1, TFDataType.UInt8);
 						var runner = session.GetRunner ();
 
 
@@ -89,7 +89,7 @@ namespace ExampleObjectDetection
 						var classes = (float [,])output [2].GetValue (jagged: false);
 						var num = (float [])output [3].GetValue (jagged: false);
 
-						DrawBoxes (boxes, scores, classes, tuple.input, tuple.output, MIN_SCORE_FOR_OBJECT_HIGHLIGHTING);
+						DrawBoxes (boxes, scores, classes, tuple.Item1, tuple.Item2, MIN_SCORE_FOR_OBJECT_HIGHLIGHTING);
 						Console.WriteLine($"Done. See {_output_relative}");
 					}
 				}

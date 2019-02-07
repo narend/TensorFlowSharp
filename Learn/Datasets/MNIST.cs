@@ -61,7 +61,7 @@ namespace Learn.Mnist
 				this.oneHotLabels = oneHotLabels;
 			}
 
-			public (float[,],float [,]) NextBatch (int batchSize)
+			public Tuple<float[,], float[,]> NextBatch (int batchSize)
 			{
 				var imageData = new float [batchSize, 784];
 				var labelData = new float [batchSize, 10];
@@ -75,7 +75,7 @@ namespace Learn.Mnist
 				}
 
 				start += batchSize;
-				return (imageData, labelData);
+				return new Tuple<float[,], float[,]>(imageData, labelData);
 			}
 		}
 

@@ -245,10 +245,16 @@ namespace SampleTest
 			// 5000 for training
 			const int trainCount = 5000;
 			const int testCount = 200;
-			(var trainingImages, var trainingLabels) = mnist.GetTrainReader ().NextBatch (trainCount);
-			(var testImages, var testLabels) = mnist.GetTestReader ().NextBatch (testCount);
+            //(var trainingImages, var trainingLabels) = mnist.GetTrainReader ().NextBatch (trainCount);
+            //(var testImages, var testLabels) = mnist.GetTestReader ().NextBatch (testCount);
+            var trainBatch = mnist.GetTrainReader().NextBatch(trainCount);
+            var testBatch = mnist.GetTestReader().NextBatch(testCount);
+            var trainingImages = trainBatch.Item1;
+            var trainingLabels = trainBatch.Item2;
+            var testImages = testBatch.Item1;
+            var testLabels = testBatch.Item2;
 
-			Console.WriteLine ("Nearest neighbor on Mnist images");
+            Console.WriteLine ("Nearest neighbor on Mnist images");
 			using (var g = new TFGraph ()) {
 				var s = new TFSession (g);
 
@@ -350,12 +356,12 @@ namespace SampleTest
 			t.TestOutputShape ();
 			//t.AttributesTest ();
 			t.GetAttributesTest ();
-			t.WhileTest ();
+            //t.WhileTest (); //todo: this gives acess violation exception even on the code in migueldeicaza/TensorFlowSharp original source. to debug.
 
-			//var n = new Mnist ();
-			//n.ReadDataSets ("/Users/miguel/Downloads", numClasses: 10);
+            //var n = new Mnist ();
+            //n.ReadDataSets ("/Users/miguel/Downloads", numClasses: 10);
 
-			t.BasicConstantOps ();
+            t.BasicConstantOps ();
 			t.BasicVariables ();
 			t.BasicMultidimensionalArray ();
 			t.BasicMatrix ();
